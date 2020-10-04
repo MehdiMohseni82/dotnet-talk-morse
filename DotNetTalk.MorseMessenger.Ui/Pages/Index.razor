@@ -1,0 +1,31 @@
+﻿@page "/"
+@using System.Net.Http
+@inject HttpClient Http
+
+@using System.Net
+@using DotNetTalk.MorseMessenger.Common
+
+<h1>Send a morse message to me!</h1>
+<h3>Turn on a light on my home</h3>
+
+<br />
+<EditForm Model="@message" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText class="form-text" id="name" @bind-Value="message.Body" />
+
+    <br />
+
+    <button class="btn btn-dark" type="submit">Send Message</button>
+</EditForm>
+
+
+@code {
+    private Message message = new Message();
+
+    protected async Task HandleValidSubmit()
+    {
+        await Http.PostAsJsonAsync("/Messenger/SendMessage", message);
+    }
+}
